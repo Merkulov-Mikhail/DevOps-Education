@@ -7,18 +7,21 @@ on:
   pull_request:
     branches:
       - master
+
+env: 
+  workdir: ./
+
 jobs:
   master:
     runs-on: ubuntu-latest
     steps:
-      - name: start
-        uses: actions/checkout@v4
-      - name: download requirements
+      - uses: actions/checkout@v4
+
+      - name: Download requirements
         run: sudo apt install cmake gcc libgtest-dev -y 
-      - name: build
-        run: mkdir build && cmake . -B ./build
-      - name: run make
-        run: make --directory=build
-      - name: tests
-        run: ./build/tests/tests
-        
+
+      - name: Build project
+        run: ./build.sh
+
+      - name: Run tests
+        run: ctest --test-dir ./build
